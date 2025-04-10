@@ -88,8 +88,13 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...coefficients) {
+  if (coefficients.length === 0) return null;
+
+  return (x) =>
+    coefficients.reduce((sum, coeff, index) => {
+      return sum + coeff * x ** (coefficients.length - index - 1);
+    }, 0);
 }
 
 /**
@@ -134,8 +139,20 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let attempt = attempts;
+
+  function test() {
+    try {
+      return func();
+    } catch (error) {
+      attempt -= 1;
+      if (attempt === 0) throw new Error('test');
+      return test();
+    }
+  }
+
+  return test;
 }
 
 /**
